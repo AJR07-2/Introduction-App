@@ -10,6 +10,7 @@ import SwiftUI
 
 struct Main: View {
     @State var showingAlert = false
+    @State var showEmailAlert = false
     @State var showingDescription = false
     @State var descOpacity = 0.1
     var body: some View {
@@ -42,28 +43,30 @@ struct Main: View {
                         })
                     })
                     
-                    Button(action: {}, label: {
-                        Link(destination: URL(string: "angjunray@live.com")!, label: {
-                            Image(systemName: "envelope.fill")
-                                .resizable()
-                                .frame(width: 60, height: 50, alignment: .leading)
-                                .foregroundColor(.black)
-                        })
+                    Button(action: {
+                        let pasteboard = UIPasteboard.general
+                        pasteboard.string = "angjunray@live.com"
+                        showEmailAlert = true
+                    }, label: {
+                        Image(systemName: "envelope.fill")
+                            .resizable()
+                            .frame(width: 60, height: 50, alignment: .leading)
+                            .foregroundColor(.black)
                     })
+                    .alert(isPresented: $showEmailAlert) {
+                        Alert(title: Text("Email coppied to clipboard!"), message: Text("angjunray@live.com"), dismissButton: .default(Text("Got it!")))
+                    }
                     
                     Button(action: {
                         
                     }, label: {
-                        Link(destination: URL(string: "bit.ly/deccourse2021")!, label: {
+                        Link(destination: URL(string: "https://bit.ly/deccourse2021")!, label: {
                             Image("Youtube")
                                 .resizable()
                                 .frame(width: 60, height: 60, alignment: .leading)
                                 .foregroundColor(.black)
                         })
                     })
-                    .alert(isPresented: $showingAlert) {
-                         Alert(title: Text("That link a bit sketchy right?"), message: Text("XD"), dismissButton: .default(Text("Yeah nice rickroll")))
-                     }
                     
                     Button(action: {
                         descOpacity = 0.1
@@ -103,6 +106,9 @@ struct Main: View {
                 }, label:{
                     Text("Hello I do not know what to write here")
                 })
+            }
+            if(showingAlert) {
+                Text("That link a bit sketchy right?")
             }
         }
     }
